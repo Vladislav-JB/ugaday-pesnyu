@@ -1,31 +1,326 @@
 <!doctype html>
-<html lang="ru" data-stub>
+<html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Музыкальный сайт &#171;Угадай песню&#187; · демо готовится</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Угадай песню · музыкальная игра онлайн</title>
+<meta name="description" content="Угадай песню по отрывку: 4 режима, плейлисты по жанрам и эпохам, рейтинг лучших. Официальные 30-секундные превью треков.">
 <meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="120">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Угадай песню · музыкальная игра">
+<meta property="og:description" content="Классика, блиц, «Кто поёт» и «Угадай год». Попробуйте набрать максимум!">
+<meta property="og:url" content="https://web-atelie.ru/ugaday-pesnyu/">
+<meta name="theme-color" content="#120C22">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23120C22'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%23FF4FA3' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23FFD166'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@1,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F6F3EE;--ink:#1F1E1C;--muted:#6B655C;--acc:#8A6737}
-@media (prefers-color-scheme:dark){:root{--bg:#161615;--ink:#EDE7DC;--muted:#A9A195;--acc:#C9A66B}}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Manrope,system-ui,sans-serif;display:grid;place-items:center;padding:24px}
-main{max-width:560px;text-align:center;display:flex;flex-direction:column;gap:18px;align-items:center}
-.k{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);font-weight:600}
-h1{font:500 clamp(2rem,6vw,3rem)/1.1 "Cormorant Garamond",Georgia,serif;margin:0;text-wrap:balance}
-p{margin:0;color:var(--muted)}
-.bar{width:220px;height:3px;background:color-mix(in srgb,var(--acc) 20%,transparent);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;width:40%;background:var(--acc);animation:m 1.6s ease-in-out infinite}
-@keyframes m{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
-@media (prefers-reduced-motion:reduce){.bar i{animation:none;width:60%}}
+:root{--bg:#120C22;--bg2:#1B1233;--card:#221840;--card2:#2C2052;--line:#3A2C66;--ink:#F6F1FF;--soft:#B9AED6;--mute:#8678B0;
+  --pink:#FF4FA3;--violet:#8B5CF6;--gold:#FFD166;--ok:#2BD48C;--bad:#FF5C6C;--r:18px;--fd:"Unbounded",system-ui,sans-serif;--ft:"Manrope",system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1200px 700px at 15% -10%,#3B1F6E 0%,transparent 60%),radial-gradient(900px 600px at 100% 10%,#5A1748 0%,transparent 55%),var(--bg);background-attachment:fixed;color:var(--ink);font:16px/1.55 var(--ft);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+h1,h2,h3{font-family:var(--fd);margin:0;line-height:1.1;letter-spacing:-.01em}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.top{display:flex;align-items:center;gap:16px;padding:18px 0}
+.logo{display:flex;align-items:center;gap:10px;font:800 18px var(--fd);text-decoration:none}
+.logo i{width:34px;height:34px;border-radius:50%;background:conic-gradient(from 0deg,var(--pink),var(--violet),var(--gold),var(--pink));display:grid;place-items:center;font-style:normal}
+.logo i::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--bg)}
+.top__nav{margin-left:auto;display:flex;gap:8px}
+.chip{background:rgb(255 255 255 / .06);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;text-decoration:none}
+.chip:hover{border-color:var(--pink)}
+
+/* экран выбора */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:30px;align-items:center;padding:30px 0 20px}
+.hero h1{font-size:clamp(34px,5.4vw,64px)}
+.hero h1 span{background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--soft);font-size:18px;max-width:520px;margin:16px 0 0}
+.vinyl{position:relative;width:min(340px,80vw);aspect-ratio:1;margin:0 auto;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#17112B 0 2px,#0D0919 2px 4px);box-shadow:0 30px 80px rgb(255 79 163 / .25),inset 0 0 0 10px #0B0716}
+.vinyl::before{content:"";position:absolute;inset:34%;border-radius:50%;background:conic-gradient(from 90deg,var(--pink),var(--violet),var(--gold),var(--pink))}
+.vinyl::after{content:"";position:absolute;inset:47%;border-radius:50%;background:var(--bg)}
+.vinyl.spin{animation:spin 2.4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.label{font:600 13px var(--ft);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:30px 0 12px}
+.modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.mode{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:20px;text-align:left;transition:border-color .2s,transform .2s,background .2s}
+.mode:hover{transform:translateY(-3px);border-color:var(--violet)}
+.mode[aria-pressed="true"]{border-color:var(--pink);background:linear-gradient(160deg,#3A1F55,var(--card) 70%)}
+.mode b{display:block;font:800 17px var(--fd);margin:12px 0 6px}
+.mode span{font-size:14px;color:var(--soft)}
+.mode em{font-style:normal;font-size:26px}
+.lists{display:flex;flex-wrap:wrap;gap:10px}
+.list{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px}
+.list[aria-pressed="true"]{border-color:var(--gold);background:#3A2E1A;color:var(--gold)}
+.start{margin-top:26px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:16px 28px;font:800 17px var(--fd);background:linear-gradient(90deg,var(--pink),var(--violet));color:#fff;box-shadow:0 14px 34px rgb(255 79 163 / .35)}
+.btn:hover{filter:brightness(1.08)}
+.btn[disabled]{opacity:.5;cursor:wait}
+.btn--ghost{background:var(--card);box-shadow:none;border:1px solid var(--line);font-size:15px}
+.start small{color:var(--mute)}
+
+/* игра */
+.game{display:none;padding:10px 0 40px}
+.game.is-on{display:block}
+.hud{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+.hud .chip b{color:var(--gold)}
+.hud .chip:last-child{margin-left:auto}
+.stage{display:grid;grid-template-columns:260px minmax(0,1fr);gap:30px;align-items:center;background:rgb(34 24 64 / .7);border:1px solid var(--line);border-radius:24px;padding:28px}
+.disc{position:relative;width:220px;aspect-ratio:1;margin:0 auto}
+.disc .vinyl{width:100%}
+.cover{position:absolute;inset:0;border-radius:50%;background-size:cover;background-position:center;opacity:0;transition:opacity .4s}
+.cover.on{opacity:1;border-radius:18px}
+.timer{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin:16px 0 0}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--gold),var(--pink));transform-origin:left;transition:transform .1s linear}
+.q h2{font-size:clamp(20px,2.4vw,28px)}
+.q p{color:var(--soft);margin:8px 0 18px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.opt{background:var(--card2);border:2px solid var(--line);border-radius:14px;padding:16px;text-align:left;font-weight:700;font-size:16px;line-height:1.3;transition:border-color .15s,background .15s;min-height:64px}
+.opt:hover:not([disabled]){border-color:var(--violet)}
+.opt.ok{border-color:var(--ok);background:#123B2E}
+.opt.bad{border-color:var(--bad);background:#3E1726}
+.opt[disabled]{cursor:default}
+.reveal{margin-top:16px;min-height:28px;color:var(--soft);font-size:15px}
+.reveal b{color:var(--ink)}
+.reveal a{color:var(--gold);font-weight:700}
+.next{margin-top:14px}
+.loading{display:flex;align-items:center;gap:12px;color:var(--soft);padding:30px 0}
+.loading::before{content:"";width:22px;height:22px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--pink);animation:spin 1s linear infinite}
+
+/* итоги */
+.result{display:none;text-align:center;padding:30px 0 50px}
+.result.is-on{display:block}
+.result h2{font-size:clamp(28px,4vw,46px)}
+.result .big{font:800 clamp(56px,10vw,110px)/1 var(--fd);background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;margin:18px 0 6px}
+.result p{color:var(--soft)}
+.result .start{justify-content:center}
+.board{max-width:420px;margin:26px auto 0;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 22px}
+.board h3{font-size:15px;margin-bottom:8px}
+.board ol{margin:0;padding-left:20px;color:var(--soft)}
+.board li b{color:var(--ink)}
+
+/* как устроено */
+.how{padding:60px 0 20px}
+.how h2{font-size:clamp(24px,3vw,34px);margin-bottom:22px}
+.how__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.how__grid div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.how__grid b{display:block;font:800 16px var(--fd);margin-bottom:8px;color:var(--gold)}
+.how__grid p{margin:0;color:var(--soft);font-size:15px}
+
+.foot{border-top:1px solid var(--line);margin-top:50px;padding:22px 0 34px;color:var(--mute);font-size:13.5px}
+.foot__in{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 24px}
+.foot__demo{flex-basis:100%;font-size:12.5px}
+/* подпись разработчика в подвале: «Создан в «Веб-Ателье»» – одинаковая на всех сайтах, не менять */
+.foot__made{display:inline-block;white-space:nowrap;font-style:italic;font-size:14px;line-height:1.4;color:var(--soft);padding:.4em 0}
+.foot__made a{display:inline;margin:0 0 0 .3em;color:inherit;text-decoration:none;font-family:Calibri,"Carlito",sans-serif;font-weight:700;font-style:italic;font-size:1.12em}
+.foot__made a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:.18em}
+.foot__made img{display:inline-block;width:40px;height:52px;max-width:none;margin-left:.35em;vertical-align:-7px}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero .vinyl{width:min(220px,60vw)}
+  .modes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stage{grid-template-columns:minmax(0,1fr);padding:20px}
+  .disc{width:160px}
+  .how__grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .top__nav .chip:first-child{display:none}
+  .opts{grid-template-columns:minmax(0,1fr)}
+  .opt{min-height:54px;padding:13px 14px;font-size:15px}
+  .mode{padding:16px}
+  .btn{width:100%;justify-content:center}
+  .hud .chip{padding:6px 11px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body><main>
-<div class="k">Демо-версия по вашему ТЗ</div>
-<h1>Музыкальный сайт &#171;Угадай песню&#187;</h1>
-<div class="bar" aria-hidden="true"><i></i></div>
-<p>Сайт сейчас собирается по вашему техническому заданию.<br>Будет готов сегодня к <b>18:42</b> – по этой же ссылке.</p>
-<p style="font-size:.85rem">Страница обновится сама.</p>
-</main></body></html>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#" id="home"><i></i>Угадай песню</a>
+    <nav class="top__nav"><a class="chip" href="#kak">Как устроено</a><a class="chip" href="#" id="toTop">Играть</a></nav>
+  </header>
+
+  <section id="menu">
+    <div class="hero">
+      <div>
+        <h1>Угадай песню<br><span>за 10 секунд</span></h1>
+        <p>Слушайте отрывок и выбирайте ответ. Чем быстрее угадали – тем больше очков. Четыре режима, плейлисты по жанрам и эпохам.</p>
+      </div>
+      <div class="vinyl" id="heroVinyl" aria-hidden="true"></div>
+    </div>
+
+    <div class="label">1. Режим игры</div>
+    <div class="modes" id="modes">
+      <button class="mode" type="button" data-mode="classic" aria-pressed="true"><em>🎧</em><b>Классика</b><span>10 песен, отрывок 10 секунд, 4 варианта названия</span></button>
+      <button class="mode" type="button" data-mode="blitz" aria-pressed="false"><em>⚡</em><b>Блиц</b><span>60 секунд: угадайте как можно больше песен подряд</span></button>
+      <button class="mode" type="button" data-mode="artist" aria-pressed="false"><em>🎤</em><b>Кто поёт</b><span>Угадайте исполнителя по голосу</span></button>
+      <button class="mode" type="button" data-mode="year" aria-pressed="false"><em>📅</em><b>Угадай год</b><span>В каком году вышла песня?</span></button>
+    </div>
+
+    <div class="label">2. Плейлист</div>
+    <div class="lists" id="lists"></div>
+
+    <div class="start">
+      <button class="btn" type="button" id="go">▶ Начать игру</button>
+      <small>Звук включится после нажатия – сделайте погромче</small>
+    </div>
+  </section>
+
+  <section class="game" id="game" aria-live="polite">
+    <div class="hud">
+      <span class="chip" id="hudMode"></span>
+      <span class="chip">Раунд <b id="hudRound">1</b></span>
+      <span class="chip">Очки <b id="hudScore">0</b></span>
+      <span class="chip">Серия <b id="hudStreak">0</b> 🔥</span>
+      <button class="chip" type="button" id="quit">Выйти</button>
+    </div>
+    <div class="stage">
+      <div>
+        <div class="disc"><div class="vinyl" id="disc"></div><div class="cover" id="cover"></div></div>
+        <div class="timer"><i id="bar"></i></div>
+      </div>
+      <div class="q" id="q"><div class="loading">Подбираем песни…</div></div>
+    </div>
+  </section>
+
+  <section class="result" id="result">
+    <h2 id="resTitle">Отличная игра!</h2>
+    <div class="big" id="resScore">0</div>
+    <p id="resText"></p>
+    <div class="start"><button class="btn" type="button" id="again">↻ Ещё раз</button><button class="btn btn--ghost" type="button" id="toMenu">Другой режим</button></div>
+    <div class="board"><h3>Лучшие результаты на этом устройстве</h3><ol id="board"></ol></div>
+  </section>
+
+  <section class="how" id="kak">
+    <h2>Как устроен сайт</h2>
+    <div class="how__grid">
+      <div><b>Откуда песни</b><p>Миллионы треков без своего хранилища: отрывки по 30 секунд берутся из официального каталога iTunes / Apple Music через открытый API. Плейлисты собираются автоматически по исполнителям и жанрам.</p></div>
+      <div><b>Права</b><p>Сайт не хранит и не раздаёт музыку: играет только официальные превью, которые сервисы дают для продвижения треков, и у каждой песни есть ссылка на полную версию. Для полностью «чистого» режима можно подключить музыку с лицензией royalty-free.</p></div>
+      <div><b>Что можно добавить</b><p>Аккаунты и общий рейтинг игроков, комнаты для игры с друзьями, свои плейлисты, ежедневное задание, монетизацию через рекламу или подписку.</p></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="foot__in">
+      <span>«Угадай песню» · музыкальная игра</span>
+      <span class="foot__made">Создан в <a href="https://web-atelie.ru/" target="_blank" rel="noopener">«Веб-Ателье»</a><img src="assets/web-atelie.png" alt="" width="40" height="52" loading="lazy" decoding="async"></span>
+      <span class="foot__demo">Демо-концепт. Отрывки песен и обложки – официальные превью из каталога iTunes / Apple Music, принадлежат правообладателям и используются для ознакомления со ссылкой на полную версию. Рейтинг хранится только в этом браузере.</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const LISTS={
+  rock:{name:'Русский рок',artists:['Кино','Земфира','Сплин','Би-2','Мумий Тролль','ДДТ','Король и Шут','Наутилус Помпилиус']},
+  pop:{name:'Русский поп',artists:['Звери','Баста','Макс Корж','Монеточка','Ёлка','Полина Гагарина','Zivert','Тима Белорусских']},
+  nineties:{name:'Хиты 90-х',artists:['Руки Вверх!','Иванушки International','Агата Кристи','Дискотека Авария','Hi-Fi','Мираж','Сектор Газа','Лесоповал']},
+  world:{name:'Зарубежные хиты',artists:['Queen','ABBA','Michael Jackson','Coldplay','Imagine Dragons','Adele','The Weeknd','Dua Lipa']}
+};
+const MODES={classic:'🎧 Классика',blitz:'⚡ Блиц',artist:'🎤 Кто поёт',year:'📅 Угадай год'};
+const $=s=>document.querySelector(s);
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let mode='classic',list='rock';
+// плейлисты
+const lists=$('#lists');
+Object.entries(LISTS).forEach(([k,v])=>{const b=document.createElement('button');b.className='list';b.type='button';b.textContent=v.name;b.setAttribute('aria-pressed',k===list);b.onclick=()=>{list=k;lists.querySelectorAll('.list').forEach(x=>x.setAttribute('aria-pressed',x===b))};lists.append(b)});
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+
+// загрузка песен из iTunes Search API
+const cache={};
+function jsonp(url){return new Promise((res,rej)=>{const cb='itc'+Math.random().toString(36).slice(2);window[cb]=d=>{res(d);delete window[cb];s.remove()};const s=document.createElement('script');s.src=url+'&callback='+cb;s.onerror=()=>rej();document.body.append(s);setTimeout(()=>rej('timeout'),9000)})}
+async function search(term){
+  const url=`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&country=RU&media=music&entity=song&limit=12`;
+  try{const r=await fetch(url);if(!r.ok)throw 0;return (await r.json()).results}catch(e){return (await jsonp(url)).results}
+}
+const clean=t=>t.replace(/\s*[\(\[].*?[\)\]]/g,'').replace(/\s*-\s*(remaster|live|edit).*$/i,'').trim();
+async function loadList(k){
+  if(cache[k])return cache[k];
+  const all=await Promise.all(LISTS[k].artists.map(a=>search(a).catch(()=>[])));
+  const seen=new Set(),out=[];
+  all.forEach((res,i)=>{let n=0;for(const t of res){const want=LISTS[k].artists[i].toLowerCase().replace('!','');if(!t.previewUrl||!t.artistName.toLowerCase().includes(want.split(' ')[0]))continue;const title=clean(t.trackName);const key=(t.artistName+'|'+title).toLowerCase();if(seen.has(key)||seen.has(title.toLowerCase()))continue;seen.add(key);seen.add(title.toLowerCase());out.push({title,artist:t.artistName,year:+(t.releaseDate||'').slice(0,4)||null,preview:t.previewUrl,cover:(t.artworkUrl100||'').replace('100x100','400x400'),link:t.trackViewUrl});if(++n>=6)break}});
+  return cache[k]=out;
+}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+
+// игра
+const audio=new Audio();audio.preload='auto';
+let pool=[],queue=[],round=0,score=0,streak=0,correct=0,timer=null,clipStart=0,answered=false,blitzEnd=0;
+const CLIP={classic:10,artist:10,year:12,blitz:5};
+function show(id){['menu','game','result'].forEach(x=>$('#'+x).style.display=x===id?'':'none');$('#game').classList.toggle('is-on',id==='game');$('#result').classList.toggle('is-on',id==='result');scrollTo({top:0,behavior:'smooth'})}
+show('menu');
+async function start(){
+  const go=$('#go');go.disabled=true;go.textContent='Загружаем песни…';
+  try{pool=await loadList(list)}catch(e){pool=[]}
+  go.disabled=false;go.textContent='▶ Начать игру';
+  if(pool.length<8){alert('Не удалось загрузить песни. Проверьте интернет и попробуйте ещё раз.');return}
+  queue=shuffle(pool);round=0;score=0;streak=0;correct=0;
+  $('#hudMode').textContent=MODES[mode]+' · '+LISTS[list].name;
+  show('game');
+  if(mode==='blitz')blitzEnd=Date.now()+60000;
+  next();
+}
+function hud(){$('#hudRound').textContent=mode==='blitz'?Math.max(0,Math.ceil((blitzEnd-Date.now())/1000))+' с':round+(mode==='blitz'?'':'/10');$('#hudScore').textContent=score;$('#hudStreak').textContent=streak}
+function options(t){
+  if(mode==='year'){const ys=new Set([t.year]);while(ys.size<4){const y=t.year+(Math.random()*16|0)-8;if(y!==t.year&&y<=new Date().getFullYear()&&y>1960)ys.add(y)}return shuffle([...ys]).map(y=>({label:String(y),ok:y===t.year}))}
+  if(mode==='artist'){const arts=shuffle([...new Set(pool.map(x=>x.artist).filter(a=>a!==t.artist))]).slice(0,3);return shuffle([t.artist,...arts]).map(a=>({label:a,ok:a===t.artist}))}
+  const others=shuffle(pool.filter(x=>x.title!==t.title)).slice(0,3);return shuffle([t,...others]).map(x=>({label:x.title,ok:x===t,sub:x.artist}))
+}
+function next(){
+  clearInterval(timer);answered=false;
+  if(mode!=='blitz'&&round>=10)return finish();
+  if(mode==='blitz'&&Date.now()>=blitzEnd)return finish();
+  if(!queue.length)queue=shuffle(pool);
+  let t=queue.shift();if(mode==='year'&&!t.year){return next()}
+  round++;hud();
+  $('#cover').classList.remove('on');$('#cover').style.backgroundImage=`url("${t.cover}")`;
+  const q={classic:'Что это за песня?',blitz:'Быстрее! Что за песня?',artist:'Кто исполняет эту песню?',year:'В каком году вышла песня?'}[mode];
+  const hint={classic:'Слушайте отрывок – чем быстрее ответ, тем больше очков',blitz:'Отрывок 5 секунд, ошибка – минус серия',artist:'Название не скажем – только голос',year:'Точный год – 150 очков, ±1 год – 50'}[mode];
+  const opts=options(t);
+  $('#q').innerHTML=`<h2>${q}</h2><p>${hint}</p><div class="opts">${opts.map((o,i)=>`<button class="opt" type="button" data-i="${i}">${esc(o.label)}</button>`).join('')}</div><div class="reveal" id="reveal"></div>`;
+  $('#q').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(t,opts,+b.dataset.i,b));
+  audio.src=t.preview;audio.currentTime=0;audio.play().catch(()=>{});
+  $('#disc').classList.add('spin');clipStart=Date.now();
+  const len=CLIP[mode]*1000;
+  timer=setInterval(()=>{const left=Math.max(0,1-(Date.now()-clipStart)/len);$('#bar').style.transform=`scaleX(${left})`;if(mode==='blitz')hud();
+    if(mode==='blitz'&&Date.now()>=blitzEnd){clearInterval(timer);audio.pause();return finish()}
+    if(left<=0&&!answered){if(mode==='blitz'){audio.currentTime=0}else{audio.pause();$('#disc').classList.remove('spin');timeout(t,opts)}}},100);
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function lock(opts){$('#q').querySelectorAll('.opt').forEach((b,i)=>{b.disabled=true;if(opts[i].ok)b.classList.add('ok')})}
+function reveal(t,msg){$('#cover').classList.add('on');$('#reveal').innerHTML=`${msg} <b>${esc(t.artist)} – ${esc(t.title)}</b>${t.year?' ('+t.year+')':''}. <a href="${t.link}" target="_blank" rel="noopener">Слушать полностью ↗</a>`;
+  if(mode!=='blitz'){const b=document.createElement('button');b.className='btn next';b.type='button';b.textContent=round>=10?'Итоги →':'Следующая песня →';b.onclick=next;$('#q').append(b);b.focus()}}
+function answer(t,opts,i,btn){
+  if(answered)return;answered=true;clearInterval(timer);
+  const sec=(Date.now()-clipStart)/1000;let ok=opts[i].ok,pts=0;
+  if(mode==='year'&&!ok&&Math.abs(+opts[i].label-t.year)<=1){pts=50}
+  if(ok){pts=mode==='blitz'?100:mode==='year'?150:Math.round(100+100*Math.max(0,1-sec/CLIP[mode]));streak++;correct++;pts+=streak>=3?25:0}else{streak=0}
+  score+=pts;hud();lock(opts);if(!ok)btn.classList.add('bad');
+  if(mode==='blitz'){audio.pause();setTimeout(next,ok?350:900);return}
+  audio.pause();$('#disc').classList.remove('spin');
+  reveal(t,ok?`✅ Верно! +${pts}.`:pts?`Почти! +${pts}.`:'❌ Не угадали.');
+}
+function timeout(t,opts){answered=true;streak=0;hud();lock(opts);reveal(t,'⏱ Время вышло.')}
+function finish(){
+  clearInterval(timer);audio.pause();$('#disc').classList.remove('spin');
+  const key='ugp-'+mode;const b=(store.get(key)||[]);b.push({s:score,d:new Date().toLocaleDateString('ru-RU'),l:LISTS[list].name});b.sort((x,y)=>y.s-x.s);store.set(key,b.slice(0,5));
+  $('#resScore').textContent=score;
+  $('#resTitle').textContent=correct>=8||score>=1500?'Вы меломан! 🏆':correct>=5?'Отличная игра!':'Неплохо для начала!';
+  $('#resText').textContent=mode==='blitz'?`Угадано песен: ${correct} за 60 секунд`:`Угадано ${correct} из ${round}`;
+  $('#board').innerHTML=(store.get(key)||[]).map(x=>`<li><b>${x.s}</b> очков · ${esc(x.l)} · ${x.d}</li>`).join('')||'<li>Пока пусто</li>';
+  show('result');
+}
+$('#go').onclick=start;$('#again').onclick=start;$('#toMenu').onclick=()=>show('menu');
+$('#quit').onclick=()=>{clearInterval(timer);audio.pause();show('menu')};
+$('#home').onclick=$('#toTop').onclick=e=>{e.preventDefault();clearInterval(timer);audio.pause();show('menu')};
+// пока выбирают – заранее грузим плейлист по умолчанию
+loadList(list).catch(()=>{});
+</script>
+</body>
+</html>
